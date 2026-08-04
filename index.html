@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0F766E" />
+  <meta name="description" content="Career OS — All-in-one life, deen, study & work dashboard" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>" />
+  <title>Career OS</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="logo">CO</div>
+        <div>
+          <div class="brand-name">Career <span>OS</span></div>
+          <div class="brand-sub">Life · Deen · Code</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-view="dashboard"><span class="icon">◈</span> Dashboard</button>
+        <button class="nav-item" data-view="calendar"><span class="icon">▣</span> Calendar</button>
+        <button class="nav-item" data-view="tools"><span class="icon">◎</span> Tools</button>
+        <button class="nav-item" data-view="notes"><span class="icon">✎</span> Notes</button>
+        <button class="nav-item" data-view="deen"><span class="icon">☪</span> Deen</button>
+        <button class="nav-item" data-view="work"><span class="icon">⚒</span> Work</button>
+        <button class="nav-item" data-view="clients"><span class="icon">💼</span> Clients</button>
+        <button class="nav-item" data-view="study"><span class="icon">📚</span> Study</button>
+        <button class="nav-item" data-view="habits"><span class="icon">🔥</span> Habits</button>
+        <button class="nav-item" data-view="routine"><span class="icon">🌅</span> Routine</button>
+        <button class="nav-item" data-view="weekly"><span class="icon">📊</span> Weekly Review</button>
+        <button class="nav-item" data-view="plan"><span class="icon">🎯</span> 4-Month Plan</button>
+        <button class="nav-item" data-view="daily"><span class="icon">📋</span> Daily Log</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="uni-badge">Rabindra Maitree University · CSE</div>
+        <button class="theme-btn" id="themeToggle" title="Toggle theme">◐</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <!-- TOP BAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-btn" id="menuBtn">☰</button>
+          <div class="live-clock" id="liveClock">--:--:--</div>
+          <div class="live-date" id="liveDate"></div>
+        </div>
+        <div class="topbar-right">
+          <div class="weather-mini" id="weatherMini">Loading weather…</div>
+          <button class="cmd-btn" id="cmdBtn" title="Command Palette (Ctrl+K)">⌘K</button>
+        </div>
+      </header>
+
+      <!-- VIEWS -->
+      <div class="content">
+        <!-- DASHBOARD -->
+        <section class="view active" id="view-dashboard">
+          <div class="page-title">Dashboard</div>
+          <div class="dash-grid">
+            <div class="card quote-card">
+              <div class="card-label">আজকের উক্তি (Daily Quote)</div>
+              <p id="dailyQuote">Loading…</p>
+            </div>
+            <div class="card quran-card">
+              <div class="card-label">আজকের আয়াত (Daily Quran)</div>
+              <p id="dailyQuran">Loading…</p>
+            </div>
+            <div class="card">
+              <div class="card-label">Focus Timer</div>
+              <div class="timer-display" id="dashFocusTime">25:00</div>
+              <div class="timer-controls">
+                <button class="btn sm" onclick="startFocus()">Start</button>
+                <button class="btn sm ghost" onclick="pauseFocus()">Pause</button>
+                <button class="btn sm ghost" onclick="resetFocus()">Reset</button>
+              </div>
+              <div class="small muted" style="text-align:center;margin-top:8px;" id="focusCountLabel">Sessions today: 0</div>
+            </div>
+            <div class="card">
+              <div class="card-label">Today’s Snapshot</div>
+              <div class="kpi-row" id="dashKpis"></div>
+            </div>
+
+            <!-- Daily Goals -->
+            <div class="card wide">
+              <div class="card-label">আজকের ৩টি মূল লক্ষ্য (Daily Goals)</div>
+              <div id="dailyGoalsBox">
+                <div class="goal-row">
+                  <input type="checkbox" id="goalCheck0" onchange="toggleGoal(0)" />
+                  <input type="text" id="goalText0" placeholder="Goal 1 — e.g. Finish client Shopify fix" onchange="saveGoals()" />
+                </div>
+                <div class="goal-row">
+                  <input type="checkbox" id="goalCheck1" onchange="toggleGoal(1)" />
+                  <input type="text" id="goalText1" placeholder="Goal 2 — e.g. 2 hours CSE study" onchange="saveGoals()" />
+                </div>
+                <div class="goal-row">
+                  <input type="checkbox" id="goalCheck2" onchange="toggleGoal(2)" />
+                  <input type="text" id="goalText2" placeholder="Goal 3 — e.g. Send 3 Fiverr proposals" onchange="saveGoals()" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Income Goal -->
+            <div class="card">
+              <div class="card-label">Monthly Income Goal (BDT)</div>
+              <div class="row" style="margin-bottom:8px;">
+                <div class="field">
+                  <label>Target</label>
+                  <input type="number" id="incomeTarget" value="50000" min="0" onchange="saveIncomeGoal()" />
+                </div>
+                <div class="field">
+                  <label>Earned this month</label>
+                  <input type="number" id="incomeEarned" value="0" min="0" onchange="saveIncomeGoal()" />
+                </div>
+              </div>
+              <div class="progress-row">
+                <div class="progress-track"><div class="progress-fill" id="incomeProgressFill" style="width:0%"></div></div>
+                <div class="progress-pct" id="incomeProgressPct">0%</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-label">Quick Actions</div>
+              <div class="quick-tools">
+                <button class="tool-chip" onclick="switchView('tools')">Tools</button>
+                <button class="tool-chip" onclick="switchView('calendar')">Calendar</button>
+                <button class="tool-chip" onclick="switchView('notes')">Notes</button>
+                <button class="tool-chip" onclick="switchView('deen')">Deen</button>
+                <button class="tool-chip" onclick="switchView('work')">Work</button>
+                <button class="tool-chip" onclick="exportData()">Export Backup</button>
+              </div>
+            </div>
+
+            <div class="card wide">
+              <div class="card-label">Music / Lofi</div>
+              <div class="lofi-box">
+                <input type="text" id="ytLink" placeholder="Paste YouTube link (lofi / study music)…" />
+                <button class="btn" onclick="loadYoutube()">Play</button>
+              </div>
+              <div id="ytPlayer" class="yt-player"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CALENDAR -->
+        <section class="view" id="view-calendar">
+          <div class="page-title">Calendar</div>
+          <div class="card">
+            <div class="cal-header">
+              <button class="btn ghost" onclick="changeMonth(-1)">‹</button>
+              <h2 id="calTitle">Month Year</h2>
+              <button class="btn ghost" onclick="changeMonth(1)">›</button>
+              <button class="btn sm" onclick="goToday()">Today</button>
+            </div>
+            <div class="cal-weekdays">
+              <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+            <div class="cal-note" id="calNoteArea">
+              <div class="card-label">Selected day note</div>
+              <textarea id="calNoteInput" placeholder="Write something for this day…"></textarea>
+              <button class="btn sm" onclick="saveCalNote()">Save note</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- TOOLS -->
+        <section class="view" id="view-tools">
+          <div class="page-title">Tools</div>
+          <div class="tools-grid">
+            <!-- Calculator -->
+            <div class="card">
+              <div class="card-label">Calculator</div>
+              <div class="calc">
+                <input type="text" id="calcDisplay" readonly value="0" />
+                <div class="calc-keys">
+                  <button onclick="calcInput('C')">C</button>
+                  <button onclick="calcInput('±')">±</button>
+                  <button onclick="calcInput('%')">%</button>
+                  <button class="op" onclick="calcInput('/')">÷</button>
+                  <button onclick="calcInput('7')">7</button>
+                  <button onclick="calcInput('8')">8</button>
+                  <button onclick="calcInput('9')">9</button>
+                  <button class="op" onclick="calcInput('*')">×</button>
+                  <button onclick="calcInput('4')">4</button>
+                  <button onclick="calcInput('5')">5</button>
+                  <button onclick="calcInput('6')">6</button>
+                  <button class="op" onclick="calcInput('-')">−</button>
+                  <button onclick="calcInput('1')">1</button>
+                  <button onclick="calcInput('2')">2</button>
+                  <button onclick="calcInput('3')">3</button>
+                  <button class="op" onclick="calcInput('+')">+</button>
+                  <button class="zero" onclick="calcInput('0')">0</button>
+                  <button onclick="calcInput('.')">.</button>
+                  <button class="eq" onclick="calcInput('=')">=</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Currency -->
+            <div class="card">
+              <div class="card-label">Currency Converter</div>
+              <div class="currency">
+                <div class="row">
+                  <input type="number" id="curAmount" value="1" min="0" step="any" />
+                  <select id="curFrom">
+                    <option value="USD">USD</option>
+                    <option value="BDT" selected>BDT</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    <option value="INR">INR</option>
+                    <option value="SAR">SAR</option>
+                  </select>
+                </div>
+                <div class="swap" onclick="swapCurrency()">⇅</div>
+                <div class="row">
+                  <input type="text" id="curResult" readonly />
+                  <select id="curTo">
+                    <option value="BDT">BDT</option>
+                    <option value="USD" selected>USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    <option value="INR">INR</option>
+                    <option value="SAR">SAR</option>
+                  </select>
+                </div>
+                <div class="cur-rate" id="curRate">Loading rates…</div>
+                <button class="btn sm" onclick="convertCurrency()">Convert</button>
+              </div>
+            </div>
+
+            <!-- Stopwatch -->
+            <div class="card">
+              <div class="card-label">Stopwatch</div>
+              <div class="timer-display" id="stopwatchDisplay">00:00:00</div>
+              <div class="timer-controls">
+                <button class="btn sm" id="swStartBtn" onclick="toggleStopwatch()">Start</button>
+                <button class="btn sm ghost" onclick="resetStopwatch()">Reset</button>
+                <button class="btn sm ghost" onclick="lapStopwatch()">Lap</button>
+              </div>
+              <ul class="laps" id="lapsList"></ul>
+            </div>
+
+            <!-- Focus / Pomodoro -->
+            <div class="card">
+              <div class="card-label">Focus Timer (Pomodoro)</div>
+              <div class="focus-modes">
+                <button class="mode active" data-min="25" onclick="setFocusMode(25,this)">25m</button>
+                <button class="mode" data-min="45" onclick="setFocusMode(45,this)">45m</button>
+                <button class="mode" data-min="60" onclick="setFocusMode(60,this)">60m</button>
+                <button class="mode" data-min="5" onclick="setFocusMode(5,this)">5m Break</button>
+              </div>
+              <div class="timer-display big" id="focusDisplay">25:00</div>
+              <div class="timer-controls">
+                <button class="btn" id="focusStartBtn" onclick="toggleFocus()">Start Focus</button>
+                <button class="btn ghost" onclick="resetFocus()">Reset</button>
+              </div>
+              <div class="focus-status" id="focusStatus">Ready to focus</div>
+            </div>
+
+            <!-- Alarm -->
+            <div class="card">
+              <div class="card-label">Alarm</div>
+              <div class="alarm-form">
+                <input type="time" id="alarmTime" />
+                <input type="text" id="alarmLabel" placeholder="Label (optional)" />
+                <button class="btn sm" onclick="setAlarm()">Set Alarm</button>
+              </div>
+              <ul class="alarm-list" id="alarmList"></ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- NOTES -->
+        <section class="view" id="view-notes">
+          <div class="page-title">Notes</div>
+          <div class="notes-layout">
+            <div class="notes-sidebar">
+              <button class="btn full" onclick="newNote()">+ New Note</button>
+              <ul class="notes-list" id="notesList"></ul>
+            </div>
+            <div class="notes-editor card">
+              <input type="text" id="noteTitle" placeholder="Note title…" />
+              <textarea id="noteBody" placeholder="Write freely… (supports basic markdown feel)"></textarea>
+              <div class="note-actions">
+                <button class="btn sm" onclick="saveNote()">Save</button>
+                <button class="btn sm ghost danger" onclick="deleteNote()">Delete</button>
+                <span class="note-meta" id="noteMeta"></span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- DEEN -->
+        <section class="view" id="view-deen">
+          <div class="page-title">Deen</div>
+          <div class="islamic-header">
+            <h2>Today’s Deen</h2>
+            <p>Small consistent acts — that’s what the Prophet ﷺ loved most.</p>
+            <div class="streak-badge" id="prayerStreak">0 day streak · 0/5</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Prayers</div>
+            <div class="prayer-grid" id="prayerGrid"></div>
+          </div>
+          <div class="card">
+            <div class="card-label">Tasbih</div>
+            <div class="tasbih-wrap">
+              <button class="tasbih-btn" id="tasbihBtn" onclick="tapTasbih(1)">0</button>
+              <div class="tasbih-label">SubhanAllah · Alhamdulillah · Allahu Akbar</div>
+              <div class="tasbih-actions">
+                <button class="btn sm ghost" onclick="tapTasbih(33)">+33</button>
+                <button class="btn sm ghost" onclick="tapTasbih(100)">+100</button>
+                <button class="btn sm ghost" onclick="resetTasbih()">Reset</button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-label">Qur’an today</div>
+            <div class="row">
+              <div class="field">
+                <label>Pages</label>
+                <input type="number" id="q_pages" min="0" onchange="updateQuranQuick()" />
+              </div>
+              <div class="field">
+                <label>Minutes</label>
+                <input type="number" id="q_minutes" min="0" onchange="updateQuranQuick()" />
+              </div>
+            </div>
+            <label class="checkrow">
+              <input type="checkbox" id="q_dua" onchange="updateDuaQuick()" /> Dua / Islamic reading done
+            </label>
+          </div>
+          <div class="card">
+            <div class="card-label">Surahs I’m learning</div>
+            <div class="list-add">
+              <input type="text" id="quranNew" placeholder="e.g. Surah Al-Mulk" />
+              <button class="btn sm" onclick="addQuranItem()">Add</button>
+            </div>
+            <ul class="list-items" id="quranList"></ul>
+          </div>
+        </section>
+
+        <!-- WORK -->
+        <section class="view" id="view-work">
+          <div class="page-title">Work</div>
+          <div class="card">
+            <div class="card-label">Freelance / Dev To-Do</div>
+            <div class="list-add">
+              <input type="text" id="taskNew" placeholder="e.g. Send 3 Upwork proposals" />
+              <select id="taskPlatform">
+                <option>Fiverr</option><option>Upwork</option><option>LinkedIn</option><option>Client work</option><option>Other</option>
+              </select>
+              <button class="btn sm" onclick="addTask()">Add</button>
+            </div>
+            <ul class="list-items" id="taskList"></ul>
+          </div>
+          <div class="card">
+            <div class="card-label">Ideas Inbox</div>
+            <div class="list-add">
+              <input type="text" id="ideaNew" placeholder="Capture idea now…" />
+              <select id="ideaTag">
+                <option>Business</option><option>Content</option><option>Feature</option><option>Client</option><option>Other</option>
+              </select>
+              <button class="btn sm" onclick="addIdea()">Add</button>
+            </div>
+            <ul class="list-items" id="ideaList"></ul>
+          </div>
+        </section>
+
+        <!-- STUDY -->
+        <section class="view" id="view-study">
+          <div class="page-title">Study</div>
+          <div class="card">
+            <div class="card-label">Topics & Roadmap</div>
+            <div class="list-add">
+              <input type="text" id="studyNew" placeholder="e.g. Data Structures — Arrays" />
+              <button class="btn sm" onclick="addStudyItem()">Add</button>
+            </div>
+            <ul class="list-items" id="studyList"></ul>
+          </div>
+          <div class="card">
+            <div class="card-label">Skill Roadmap</div>
+            <ul class="list-items" id="skillList"></ul>
+          </div>
+        </section>
+
+        <!-- HABITS -->
+        <section class="view" id="view-habits">
+          <div class="page-title">Habits (30 days)</div>
+          <div class="card">
+            <div class="habit-grid" id="habitGrid"></div>
+          </div>
+        </section>
+
+        <!-- PLAN -->
+        <section class="view" id="view-plan">
+          <div class="page-title">4-Month Plan</div>
+          <div class="card">
+            <div class="row">
+              <div class="field">
+                <label>Plan title</label>
+                <input type="text" id="plan_title" placeholder="e.g. Life reset — Aug to Nov 2026" />
+              </div>
+              <div class="field">
+                <label>Target date</label>
+                <input type="date" id="plan_target" />
+              </div>
+            </div>
+            <div class="field">
+              <label>Vision</label>
+              <textarea id="plan_vision" placeholder="Where you want career, deen and life to be…"></textarea>
+            </div>
+            <button class="btn" onclick="savePlan()">Save Plan</button>
+            <div id="planCountdown" class="small muted"></div>
+          </div>
+          <div class="card">
+            <div class="card-label">Milestones</div>
+            <div class="list-add">
+              <input type="text" id="milestoneNew" placeholder="e.g. Land 2 recurring clients" />
+              <select id="milestoneMonth">
+                <option value="1">Month 1</option>
+                <option value="2">Month 2</option>
+                <option value="3">Month 3</option>
+                <option value="4">Month 4</option>
+              </select>
+              <button class="btn sm" onclick="addMilestone()">Add</button>
+            </div>
+            <div class="progress-row">
+              <div class="progress-label">Overall</div>
+              <div class="progress-track"><div class="progress-fill" id="planProgressFill" style="width:0%"></div></div>
+              <div class="progress-pct" id="planProgressPct">0%</div>
+            </div>
+            <ul class="list-items" id="milestoneList"></ul>
+          </div>
+        </section>
+
+        <!-- DAILY LOG -->
+        <section class="view" id="view-daily">
+          <div class="page-title">Daily Log</div>
+          <div class="card">
+            <div class="subhead">Deen</div>
+            <div class="row">
+              <div class="field"><label>Quran pages</label><input type="number" id="d_quranPages" min="0" /></div>
+              <div class="field"><label>Quran minutes</label><input type="number" id="d_quranMinutes" min="0" /></div>
+              <div class="field"><label>Zikr count</label><input type="number" id="d_zikr" min="0" /></div>
+            </div>
+            <label class="checkrow"><input type="checkbox" id="d_duaRead" /> Dua / Islamic reading done</label>
+
+            <div class="subhead">Work / Freelance</div>
+            <div class="row">
+              <div class="field"><label>Freelance hours</label><input type="number" id="d_freelance" step="0.5" min="0" /></div>
+              <div class="field"><label>Coding study hours</label><input type="number" id="d_study" step="0.5" min="0" /></div>
+              <div class="field"><label>GitHub commits</label><input type="number" id="d_commits" min="0" /></div>
+            </div>
+            <div class="row">
+              <div class="field"><label>Proposals sent</label><input type="number" id="d_proposals" min="0" /></div>
+              <div class="field"></div>
+              <div class="field"></div>
+            </div>
+            <label class="checkrow"><input type="checkbox" id="d_fiverrTouch" /> Fiverr / portfolio touch</label>
+            <label class="checkrow"><input type="checkbox" id="d_marketing" /> Marketing block done</label>
+
+            <div class="subhead">Study & Health</div>
+            <div class="row">
+              <div class="field"><label>CSE / Job-exam hours</label><input type="number" id="d_gov" step="0.5" min="0" /></div>
+              <div class="field"><label>English (min)</label><input type="number" id="d_english" min="0" /></div>
+              <div class="field"><label>Exercise (min)</label><input type="number" id="d_exercise" min="0" /></div>
+            </div>
+
+            <div class="subhead">Money (BDT)</div>
+            <div class="row">
+              <div class="field"><label>Income today</label><input type="number" id="d_income" min="0" /></div>
+              <div class="field"><label>Expenses today</label><input type="number" id="d_expenses" min="0" /></div>
+            </div>
+
+            <button class="btn" onclick="saveDaily()">Save Today’s Log</button>
+            <span class="saved-msg" id="savedMsg">Saved</span>
+          </div>
+          <div class="card">
+            <div class="card-label">Recent days</div>
+            <div id="recentLog"></div>
+          </div>
+        </section>
+
+        <!-- CLIENTS / ACTIVE PROJECTS -->
+        <section class="view" id="view-clients">
+          <div class="page-title">Active Clients & Projects</div>
+          <div class="card">
+            <div class="card-label">Add Client / Project</div>
+            <div class="list-add">
+              <input type="text" id="clientName" placeholder="Client or project name" />
+              <select id="clientStatus">
+                <option value="Active">Active</option>
+                <option value="Waiting">Waiting on client</option>
+                <option value="Revision">Revision</option>
+                <option value="Completed">Completed</option>
+              </select>
+              <input type="date" id="clientDeadline" />
+              <button class="btn sm" onclick="addClient()">Add</button>
+            </div>
+            <ul class="list-items" id="clientList"></ul>
+          </div>
+        </section>
+
+        <!-- ROUTINE (Morning & Night Checklist) -->
+        <section class="view" id="view-routine">
+          <div class="page-title">Morning & Night Routine</div>
+          <div class="card">
+            <div class="card-label">🌅 Morning Checklist</div>
+            <div id="morningList"></div>
+            <button class="btn sm" style="margin-top:12px;" onclick="saveRoutine()">Save Morning</button>
+          </div>
+          <div class="card">
+            <div class="card-label">🌙 Night Checklist</div>
+            <div id="nightList"></div>
+            <button class="btn sm" style="margin-top:12px;" onclick="saveRoutine()">Save Night</button>
+          </div>
+        </section>
+
+        <!-- WEEKLY REVIEW -->
+        <section class="view" id="view-weekly">
+          <div class="page-title">Weekly Review</div>
+          <div class="card">
+            <div class="card-label">Last 7 Days Summary</div>
+            <div id="weeklySummary"></div>
+          </div>
+          <div class="card">
+            <div class="card-label">Freelance vs Study Hours (7 days)</div>
+            <div id="weeklyTimeBars"></div>
+          </div>
+          <div class="card">
+            <div class="card-label">Your Reflection</div>
+            <textarea id="weeklyReflection" placeholder="What went well? What needs improvement? What will you focus on next week?" style="min-height:120px;"></textarea>
+            <button class="btn" style="margin-top:10px;" onclick="saveWeeklyReflection()">Save Reflection</button>
+            <span class="saved-msg" id="savedWeekly">Saved</span>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- COMMAND PALETTE -->
+  <div class="cmd-overlay" id="cmdOverlay">
+    <div class="cmd-box">
+      <input type="text" id="cmdInput" placeholder="Type a command or search…" autocomplete="off" />
+      <ul id="cmdResults"></ul>
+    </div>
+  </div>
+
+  <!-- STICKY NOTES CONTAINER -->
+  <div id="stickyContainer"></div>
+
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>
