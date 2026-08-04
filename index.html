@@ -12,15 +12,15 @@
     background: #FAFAF7;
     color: #1C1C1E;
   }
-  #app { max-width: 780px; margin: 0 auto; padding: 24px 20px 60px; }
+  #app { max-width: 860px; margin: 0 auto; padding: 24px 20px 60px; }
   .brand { display:flex; justify-content:space-between; align-items:center; margin-bottom: 18px; }
   .brand h1 { font-size: 15px; font-weight: 700; margin:0; letter-spacing:0.2px; }
   .brand h1 span { color:#0F766E; }
   .brand .date { font-size: 11.5px; color:#8A9490; }
-  .tabs { display:flex; gap:6px; margin-bottom:18px; border-bottom:1px solid #E4E4DF; flex-wrap:wrap; }
+  .tabs { display:flex; gap:4px; margin-bottom:18px; border-bottom:1px solid #E4E4DF; flex-wrap:wrap; }
   .tab {
-    padding:8px 12px; font-size:12.5px; font-weight:600; color:#6B7570;
-    cursor:pointer; border-bottom:2px solid transparent; user-select:none;
+    padding:8px 10px; font-size:11.5px; font-weight:600; color:#6B7570;
+    cursor:pointer; border-bottom:2px solid transparent; user-select:none; white-space:nowrap;
   }
   .tab.active { color:#0F766E; border-bottom-color:#0F766E; }
   .view { display:none; }
@@ -30,14 +30,16 @@
     padding:16px 18px; margin-bottom:14px;
   }
   .card h3 { font-size:13px; font-weight:700; margin:0 0 12px; color:#14201C; }
+  .card h3 .small { font-weight:500; }
   .row { display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
   .field { flex:1; min-width:120px; }
   .field label { display:block; font-size:11px; color:#6B7570; margin-bottom:4px; }
-  .field input[type=number], .field input[type=text] {
+  .field input[type=number], .field input[type=text], .field input[type=date], .field textarea {
     width:100%; padding:7px 9px; border:1px solid #D8D8D2; border-radius:7px;
-    font-size:13px; background:#FCFCFA;
+    font-size:13px; background:#FCFCFA; font-family:inherit;
   }
-  .field input:focus { outline:none; border-color:#0F766E; }
+  .field textarea { resize:vertical; min-height:60px; }
+  .field input:focus, .field textarea:focus { outline:none; border-color:#0F766E; }
   .checkrow { display:flex; align-items:center; gap:8px; margin-bottom:8px; font-size:12.5px; }
   .checkrow input { width:16px; height:16px; accent-color:#0F766E; }
   button.primary {
@@ -46,15 +48,20 @@
   }
   button.primary:hover { background:#0F766E; }
   button.primary:disabled { opacity:0.5; cursor:default; }
+  button.ghost {
+    background:none; border:1px solid #D8D8D2; border-radius:7px; color:#6B7570;
+    font-size:11.5px; padding:6px 10px; cursor:pointer;
+  }
+  button.ghost:hover { border-color:#0F766E; color:#0F766E; }
   .kpi-grid { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
   .kpi { flex:1; min-width:130px; background:#14201C; color:#fff; border-radius:10px; padding:12px 14px; }
   .kpi .num { font-size:18px; font-weight:700; }
   .kpi .lab { font-size:10px; color:#B7C4C0; text-transform:uppercase; letter-spacing:0.5px; margin-top:3px; }
   .progress-row { display:flex; align-items:center; gap:8px; margin-bottom:9px; }
-  .progress-label { width:130px; font-size:11.5px; color:#333; flex-shrink:0; }
+  .progress-label { width:160px; font-size:11.5px; color:#333; flex-shrink:0; }
   .progress-track { flex:1; height:8px; background:#ECECE6; border-radius:5px; overflow:hidden; }
   .progress-fill { height:100%; background:linear-gradient(90deg,#0F766E,#14B8A6); }
-  .progress-pct { width:38px; text-align:right; font-size:11px; color:#666; flex-shrink:0; }
+  .progress-pct { width:50px; text-align:right; font-size:11px; color:#666; flex-shrink:0; }
   table.log { width:100%; border-collapse:collapse; font-size:11.5px; }
   table.log th { text-align:left; font-size:10px; text-transform:uppercase; color:#8A9490; padding:6px 6px; border-bottom:1px solid #E4E4DF; }
   table.log td { padding:6px 6px; border-bottom:1px solid #F0F0EB; }
@@ -63,6 +70,7 @@
   .habit-boxes { display:flex; flex-wrap:wrap; gap:3px; }
   .hb { width:14px; height:14px; border-radius:3px; background:#ECECE6; }
   .hb.on { background:#0F766E; }
+  .hb.islamic-on { background:#0B6E4F; }
   .small { font-size:11px; color:#6B7570; }
   .saved-msg { font-size:11.5px; color:#0F766E; margin-left:10px; opacity:0; transition:opacity 0.3s; }
   .saved-msg.show { opacity:1; }
@@ -73,10 +81,68 @@
     padding:14px 16px; margin-bottom:18px; font-size:12.5px; color:#6B4F0A;
   }
   .setup-banner code { background:#fff; padding:1px 5px; border-radius:4px; }
-  .sync-dot { width:7px; height:7px; border-radius:50%; display:inline-block; margin-right:5px; }
-  .sync-dot.ok { background:#0F766E; }
-  .sync-dot.err { background:#D85A30; }
-  .sync-dot.wait { background:#B8860B; }
+  .subhead { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#8A9490; margin:16px 0 8px; }
+  .subhead:first-child { margin-top:0; }
+
+  /* ---- Islamic module ---- */
+  .islamic-header {
+    background: linear-gradient(120deg,#0B4F3F,#0F766E 60%,#0B4F3F);
+    border-radius:12px; padding:16px 18px; margin-bottom:14px; color:#fff;
+    position:relative; overflow:hidden;
+  }
+  .islamic-header::after {
+    content:""; position:absolute; inset:0; opacity:0.16; pointer-events:none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='60'><path d='M30 4 L36 24 L56 24 L40 36 L46 56 L30 44 L14 56 L20 36 L4 24 L24 24 Z' fill='none' stroke='%23E7D9A9' stroke-width='1'/></svg>");
+    background-size:60px 60px;
+  }
+  .islamic-header h2 { font-size:14px; margin:0 0 3px; font-weight:700; position:relative; }
+  .islamic-header .sub { font-size:11.5px; color:#CFE8DE; position:relative; }
+  .streak-badge {
+    display:inline-flex; align-items:center; gap:5px; background:rgba(255,255,255,0.14);
+    border-radius:20px; padding:4px 11px; font-size:11.5px; margin-top:8px; position:relative;
+  }
+  .prayer-grid { display:flex; gap:8px; flex-wrap:wrap; }
+  .prayer-btn {
+    flex:1; min-width:80px; text-align:center; padding:12px 6px; border-radius:10px;
+    border:1.5px solid #E1E7E4; background:#F7FAF9; cursor:pointer; user-select:none;
+    font-size:12px; font-weight:600; color:#4A5550; transition:all 0.15s;
+  }
+  .prayer-btn .mark { display:block; font-size:16px; margin-bottom:4px; }
+  .prayer-btn.on { background:#0B6E4F; border-color:#0B6E4F; color:#fff; }
+  .tasbih-wrap { text-align:center; padding:6px 0 4px; }
+  .tasbih-btn {
+    width:132px; height:132px; border-radius:50%; border:none; cursor:pointer;
+    background:radial-gradient(circle at 35% 30%,#14B08A,#0B4F3F); color:#fff;
+    font-size:30px; font-weight:700; margin:0 auto; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 18px rgba(11,79,63,0.25);
+  }
+  .tasbih-btn:active { transform:scale(0.96); }
+  .tasbih-label { font-size:11px; color:#8A9490; margin-top:8px; }
+  .tasbih-actions { display:flex; gap:8px; justify-content:center; margin-top:10px; }
+
+  /* ---- Lists (tasks / study / ideas / quran / milestones) ---- */
+  .list-add-row { display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+  .list-add-row input[type=text] { flex:2; min-width:140px; padding:8px 10px; border:1px solid #D8D8D2; border-radius:7px; font-size:13px; }
+  .list-add-row select { flex:1; min-width:100px; }
+  .list-items { list-style:none; margin:0; padding:0; }
+  .list-item {
+    display:flex; align-items:center; gap:10px; padding:8px 2px; border-bottom:1px solid #F0F0EB; font-size:13px;
+  }
+  .list-item:last-child { border-bottom:none; }
+  .list-item input[type=checkbox] { width:16px; height:16px; accent-color:#0F766E; flex-shrink:0; }
+  .list-item .txt { flex:1; }
+  .list-item .txt.done { text-decoration:line-through; color:#A3ACA7; }
+  .tag { font-size:10px; padding:2px 7px; border-radius:20px; background:#EEF3F1; color:#5B6A64; flex-shrink:0; white-space:nowrap; }
+  .list-item .del { background:none; border:none; color:#C9C9C2; cursor:pointer; font-size:14px; flex-shrink:0; }
+  .list-item .del:hover { color:#D85A30; }
+
+  /* ---- Social grid ---- */
+  .social-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(130px,1fr)); gap:10px; }
+  .social-field label { display:flex; align-items:center; gap:5px; font-size:11px; color:#6B7570; margin-bottom:4px; }
+  .social-field input { width:100%; padding:7px 9px; border:1px solid #D8D8D2; border-radius:7px; font-size:13px; }
+  table.social-table { width:100%; border-collapse:collapse; font-size:12px; }
+  table.social-table th { text-align:left; font-size:10px; text-transform:uppercase; color:#8A9490; padding:6px; border-bottom:1px solid #E4E4DF; }
+  table.social-table td { padding:6px; border-bottom:1px solid #F0F0EB; }
 </style>
 </head>
 <body>
@@ -94,6 +160,11 @@
 
   <div class="tabs">
     <div class="tab active" data-view="daily">Daily</div>
+    <div class="tab" data-view="islamic">Deen</div>
+    <div class="tab" data-view="work">Work</div>
+    <div class="tab" data-view="ideas">Ideas</div>
+    <div class="tab" data-view="study">Study</div>
+    <div class="tab" data-view="plan">4-Month Plan</div>
     <div class="tab" data-view="weekly">Weekly</div>
     <div class="tab" data-view="monthly">Monthly</div>
     <div class="tab" data-view="habits">Habits</div>
@@ -103,30 +174,40 @@
   <!-- DAILY -->
   <div class="view active" id="view-daily">
     <div class="card">
-      <h3>Today's log</h3>
+      <h3>Today's log <span class="small">— fill once, save once</span></h3>
+
+      <div class="subhead">Deen</div>
       <div class="row">
-        <div class="field"><label>Coading Study hours</label><input type="number" id="d_study" step="0.5" min="0"></div>
-        <div class="field"><label>Gov-job study (hrs)</label><input type="number" id="d_gov" step="0.5" min="0"></div>
+        <div class="field"><label>Quran pages read</label><input type="number" id="d_quranPages" min="0"></div>
+        <div class="field"><label>Quran minutes</label><input type="number" id="d_quranMinutes" min="0"></div>
+        <div class="field"><label>Zikr count</label><input type="number" id="d_zikr" min="0"></div>
+      </div>
+      <div class="checkrow"><input type="checkbox" id="d_duaRead"> <label for="d_duaRead">Dua / islamic reading done</label></div>
+      <div class="small" style="margin-bottom:10px;">Prayer toggles + tasbih live on the <b>Deen</b> tab. Social posting lives on the <b>Work</b> tab. Both auto-save instantly.</div>
+
+      <div class="subhead">Work</div>
+      <div class="row">
+        <div class="field"><label>Coding study hours</label><input type="number" id="d_study" step="0.5" min="0"></div>
         <div class="field"><label>GitHub commits</label><input type="number" id="d_commits" min="0"></div>
-      </div>
-      <div class="row">
-        <div class="field"><label>Cold emails sent</label><input type="number" id="d_emails" min="0"></div>
         <div class="field"><label>Fiverr/Upwork proposals</label><input type="number" id="d_proposals" min="0"></div>
-        <div class="field"><label>English practice (min)</label><input type="number" id="d_english" min="0"></div>
       </div>
+      <div class="checkrow"><input type="checkbox" id="d_fiverrTouch"> <label for="d_fiverrTouch">Fiverr/portfolio touch done</label></div>
+      <div class="checkrow"><input type="checkbox" id="d_marketing"> <label for="d_marketing">Full marketing block done</label></div>
+
+      <div class="subhead">Study</div>
+      <div class="row">
+        <div class="field"><label>Job-exam study hours</label><input type="number" id="d_gov" step="0.5" min="0"></div>
+        <div class="field"><label>English practice (min)</label><input type="number" id="d_english" min="0"></div>
+        <div class="field"></div>
+      </div>
+
+      <div class="subhead">Health &amp; money</div>
       <div class="row">
         <div class="field"><label>Exercise (min)</label><input type="number" id="d_exercise" min="0"></div>
-        <div class="field"><label>Prayers (of 5)</label><input type="number" id="d_prayers" min="0" max="5"></div>
         <div class="field"><label>Income today (BDT)</label><input type="number" id="d_income" min="0"></div>
-      </div>
-      <div class="row">
         <div class="field"><label>Expenses today (BDT)</label><input type="number" id="d_expenses" min="0"></div>
-        <div class="field"></div>
-        <div class="field"></div>
       </div>
-      <div class="checkrow"><input type="checkbox" id="d_fiverr"> <label for="d_fiverr">Fiverr/portfolio touch done</label></div>
-      <div class="checkrow"><input type="checkbox" id="d_linkedin"> <label for="d_linkedin">LinkedIn post/engagement done</label></div>
-      <div class="checkrow"><input type="checkbox" id="d_marketing"> <label for="d_marketing">Full marketing block done</label></div>
+
       <div style="margin-top:8px; display:flex; align-items:center;">
         <button class="primary" id="saveBtn" onclick="saveDaily()">Save today's log</button>
         <span class="saved-msg" id="savedMsg">Synced</span>
@@ -136,6 +217,149 @@
     <div class="card">
       <h3>Recent days</h3>
       <div id="recentLog"><div class="empty">No entries yet — save your first log above.</div></div>
+    </div>
+  </div>
+
+  <!-- ISLAMIC / DEEN -->
+  <div class="view" id="view-islamic">
+    <div class="islamic-header">
+      <h2>Today's deen</h2>
+      <div class="sub">Small, consistent acts — that's what the Prophet &#65018; loved most.</div>
+      <div class="streak-badge" id="prayerStreak">0 day streak · 5/5</div>
+    </div>
+
+    <div class="card">
+      <h3>Prayers</h3>
+      <div class="prayer-grid" id="prayerGrid"></div>
+    </div>
+
+    <div class="card">
+      <h3>Tasbih counter <span class="small">— taps today, synced to your daily log</span></h3>
+      <div class="tasbih-wrap">
+        <button class="tasbih-btn" id="tasbihBtn" onclick="tapTasbih(1)">0</button>
+        <div class="tasbih-label">SubhanAllah &middot; Alhamdulillah &middot; Allahu Akbar</div>
+        <div class="tasbih-actions">
+          <button class="ghost" onclick="tapTasbih(33)">+33</button>
+          <button class="ghost" onclick="tapTasbih(100)">+100</button>
+          <button class="ghost" onclick="resetTasbih()">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Qur'an</h3>
+      <div class="row">
+        <div class="field"><label>Pages today</label><input type="number" id="q_pages" min="0" onchange="updateQuranQuick()"></div>
+        <div class="field"><label>Minutes today</label><input type="number" id="q_minutes" min="0" onchange="updateQuranQuick()"></div>
+      </div>
+      <div class="checkrow"><input type="checkbox" id="q_dua" onchange="updateDuaQuick()"> <label for="q_dua">Dua / islamic reading done today</label></div>
+    </div>
+
+    <div class="card">
+      <h3>Surahs I'm learning</h3>
+      <div class="list-add-row">
+        <input type="text" id="quranNew" placeholder="e.g. Surah Al-Mulk">
+        <button class="primary" onclick="addQuranItem()">Add</button>
+      </div>
+      <ul class="list-items" id="quranList"></ul>
+    </div>
+  </div>
+
+  <!-- WORK -->
+  <div class="view" id="view-work">
+    <div class="card">
+      <h3>Freelance / dev to-do list</h3>
+      <div class="list-add-row">
+        <input type="text" id="taskNew" placeholder="e.g. Send 3 Upwork proposals">
+        <select id="taskPlatform">
+          <option>Fiverr</option><option>Upwork</option><option>LinkedIn</option><option>Client work</option><option>Other</option>
+        </select>
+        <button class="primary" onclick="addTask()">Add</button>
+      </div>
+      <ul class="list-items" id="taskList"></ul>
+    </div>
+
+    <div class="card">
+      <h3>Today's social &amp; outreach <span class="small">— posts / messages sent, auto-saves</span></h3>
+      <div class="social-grid" id="socialGrid"></div>
+    </div>
+
+    <div class="card">
+      <h3>Social posting — this week / this month</h3>
+      <div id="socialStatsTable"></div>
+    </div>
+  </div>
+
+  <!-- IDEAS -->
+  <div class="view" id="view-ideas">
+    <div class="card">
+      <h3>Idea inbox <span class="small">— capture it now, sort it later</span></h3>
+      <div class="list-add-row">
+        <input type="text" id="ideaNew" placeholder="Whatever just came to mind...">
+        <select id="ideaTag">
+          <option>Business idea</option><option>Content idea</option><option>Feature idea</option><option>Client idea</option><option>Other</option>
+        </select>
+        <button class="primary" onclick="addIdea()">Add</button>
+      </div>
+      <div class="small" style="margin-bottom:10px;">Check the box once you've acted on an idea or decided to shelve it — it stays in the list, just marked done.</div>
+      <ul class="list-items" id="ideaList"></ul>
+    </div>
+  </div>
+
+  <!-- STUDY -->
+  <div class="view" id="view-study">
+    <div class="card">
+      <h3>Job-exam / engineering study topics</h3>
+      <div class="list-add-row">
+        <input type="text" id="studyNew" placeholder="e.g. Thermodynamics — chapter 4">
+        <button class="primary" onclick="addStudyItem()">Add</button>
+      </div>
+      <ul class="list-items" id="studyList"></ul>
+    </div>
+
+    <div class="card">
+      <h3>Skill roadmap <span class="small">— Shopify Liquid &rarr; JS &rarr; TS &rarr; Node.js &rarr; AI automation</span></h3>
+      <ul class="list-items" id="skillList"></ul>
+    </div>
+
+    <div class="card">
+      <h3>Study hours this week / month</h3>
+      <div id="studyStats" class="small"></div>
+    </div>
+  </div>
+
+  <!-- 4-MONTH PLAN -->
+  <div class="view" id="view-plan">
+    <div class="card">
+      <h3>Your next 4 months</h3>
+      <div class="row">
+        <div class="field"><label>Plan title</label><input type="text" id="plan_title" placeholder="e.g. Life reset — Aug to Nov 2026"></div>
+        <div class="field"><label>Target date</label><input type="date" id="plan_target"></div>
+      </div>
+      <div class="field" style="margin-bottom:10px;">
+        <label>Vision — what does "done" look like</label>
+        <textarea id="plan_vision" placeholder="Where you want your career, deen, and life to be in 4 months..."></textarea>
+      </div>
+      <button class="primary" onclick="savePlan()">Save plan</button>
+      <span class="saved-msg" id="savedMsgPlan">Synced</span>
+      <div id="planCountdown" class="small" style="margin-top:10px;"></div>
+    </div>
+
+    <div class="card">
+      <h3>Milestones</h3>
+      <div class="list-add-row">
+        <input type="text" id="milestoneNew" placeholder="e.g. Land 2 recurring Upwork clients">
+        <select id="milestoneMonth">
+          <option value="1">Month 1</option><option value="2">Month 2</option><option value="3">Month 3</option><option value="4">Month 4</option>
+        </select>
+        <button class="primary" onclick="addMilestone()">Add</button>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label">Overall progress</div>
+        <div class="progress-track"><div class="progress-fill" id="planProgressFill" style="width:0%"></div></div>
+        <div class="progress-pct" id="planProgressPct">0%</div>
+      </div>
+      <ul class="list-items" id="milestoneList"></ul>
     </div>
   </div>
 
@@ -196,6 +420,8 @@
     <div class="card">
       <h3>Progress</h3>
       <div class="kpi-grid" id="kpiGrid"></div>
+      <div class="kpi-grid" id="kpiGrid2"></div>
+      <div class="kpi-grid" id="kpiGrid3"></div>
       <div id="dashProgress"></div>
     </div>
   </div>
@@ -213,6 +439,27 @@ const SUPABASE_KEY = 'sb_publishable_cE6mGG-E7ahRgAYd9uF0MA_hYkVDi8e';
 
 const isConfigured = !SUPABASE_URL.includes('YOUR-PROJECT') && !SUPABASE_KEY.includes('YOUR-ANON');
 
+const PRAYERS = [
+  { key:'fajr', label:'Fajr', mark:'☾' },
+  { key:'dhuhr', label:'Dhuhr', mark:'☀' },
+  { key:'asr', label:'Asr', mark:'☀' },
+  { key:'maghrib', label:'Maghrib', mark:'☀' },
+  { key:'isha', label:'Isha', mark:'☾' }
+];
+const DEFAULT_SKILLS = [
+  'Shopify Liquid', 'JavaScript', 'TypeScript', 'Node.js', 'AI automation (n8n & LLM APIs)'
+];
+const SOCIAL_PLATFORMS = [
+  { key:'instagram', label:'Instagram' },
+  { key:'facebook', label:'Facebook' },
+  { key:'whatsapp', label:'WhatsApp' },
+  { key:'emails', label:'Emails' },
+  { key:'linkedin', label:'LinkedIn' },
+  { key:'x', label:'X' },
+  { key:'youtube', label:'YouTube' },
+  { key:'tiktok', label:'TikTok' }
+];
+
 const todayStr = () => {
   const d = new Date();
   return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
@@ -221,6 +468,15 @@ document.getElementById('statusLabel').textContent = new Date().toLocaleDateStri
 
 let entries = {};
 let config = { level:'', quarter:'Q1', skill:'', project:'', weekly:'', monthly:'' };
+let tasks = [];
+let study = [];
+let skills = null;
+let quran = [];
+let ideas = [];
+let milestones = [];
+let plan = { title:'', target:'', vision:'' };
+let tasbihSaveTimer = null;
+let socialSaveTimer = null;
 
 function headers() {
   return {
@@ -246,46 +502,89 @@ async function dbSave(id, payload) {
   if (!res.ok) throw new Error('save failed');
 }
 
+function newId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
 async function loadAll() {
   if (!isConfigured) {
     document.getElementById('setupBanner').style.display = 'block';
     document.getElementById('saveBtn').disabled = true;
-    populateTodayForm(); populateConfigForm();
-    renderRecent(); renderWeekly(); renderMonthly(); renderHabits(); renderDashboard();
+    skills = DEFAULT_SKILLS.map(t => ({ id:newId(), text:t, done:false }));
+    renderEverything();
     return;
   }
   try {
     entries = (await dbLoad('entries')) || {};
     config = (await dbLoad('config')) || config;
+    tasks = (await dbLoad('tasks')) || [];
+    study = (await dbLoad('study')) || [];
+    quran = (await dbLoad('quran')) || [];
+    ideas = (await dbLoad('ideas')) || [];
+    milestones = (await dbLoad('milestones')) || [];
+    plan = (await dbLoad('plan')) || plan;
+    skills = await dbLoad('skills');
+    if (!skills) {
+      skills = DEFAULT_SKILLS.map(t => ({ id:newId(), text:t, done:false }));
+      await dbSave('skills', skills);
+    }
   } catch (e) {
     console.error(e);
     document.getElementById('setupBanner').style.display = 'block';
     document.getElementById('setupBanner').textContent = 'Could not reach the database. Check your Supabase URL/key and that the table exists.';
+    if (!skills) skills = DEFAULT_SKILLS.map(t => ({ id:newId(), text:t, done:false }));
   }
+  renderEverything();
+}
+
+function renderEverything() {
   populateTodayForm();
   populateConfigForm();
+  populatePlanForm();
   renderRecent();
   renderWeekly();
   renderMonthly();
   renderHabits();
   renderDashboard();
+  renderPrayerGrid();
+  renderTasbih();
+  renderQuranQuickFields();
+  renderQuranList();
+  renderTaskList();
+  renderSocialGrid();
+  renderSocialStats();
+  renderIdeaList();
+  renderStudyList();
+  renderSkillList();
+  renderStudyStats();
+  renderMilestoneList();
+  renderPlanProgress();
+}
+
+function todayEntry() {
+  if (!entries[todayStr()]) entries[todayStr()] = {};
+  if (!entries[todayStr()].social) entries[todayStr()].social = {};
+  return entries[todayStr()];
+}
+
+function socialSum(days, key) {
+  return days.reduce((s,k)=> s + ((entries[k] && entries[k].social && entries[k].social[key]) || 0), 0);
 }
 
 function populateTodayForm() {
   const t = entries[todayStr()] || {};
+  document.getElementById('d_quranPages').value = t.quranPages || '';
+  document.getElementById('d_quranMinutes').value = t.quranMinutes || '';
+  document.getElementById('d_zikr').value = t.zikr || '';
+  document.getElementById('d_duaRead').checked = !!t.duaRead;
   document.getElementById('d_study').value = t.study || '';
-  document.getElementById('d_gov').value = t.gov || '';
   document.getElementById('d_commits').value = t.commits || '';
-  document.getElementById('d_emails').value = t.emails || '';
   document.getElementById('d_proposals').value = t.proposals || '';
+  document.getElementById('d_fiverrTouch').checked = !!t.fiverrTouch;
+  document.getElementById('d_marketing').checked = !!t.marketing;
+  document.getElementById('d_gov').value = t.gov || '';
   document.getElementById('d_english').value = t.english || '';
   document.getElementById('d_exercise').value = t.exercise || '';
-  document.getElementById('d_prayers').value = t.prayers || '';
   document.getElementById('d_income').value = t.income || '';
   document.getElementById('d_expenses').value = t.expenses || '';
-  document.getElementById('d_fiverr').checked = !!t.fiverr;
-  document.getElementById('d_linkedin').checked = !!t.linkedin;
-  document.getElementById('d_marketing').checked = !!t.marketing;
 }
 
 function populateConfigForm() {
@@ -297,30 +596,37 @@ function populateConfigForm() {
   document.getElementById('cfg_monthly').value = config.monthly || '';
 }
 
+function populatePlanForm() {
+  document.getElementById('plan_title').value = plan.title || '';
+  document.getElementById('plan_target').value = plan.target || '';
+  document.getElementById('plan_vision').value = plan.vision || '';
+}
+
 async function saveDaily() {
-  const t = {
+  const t = todayEntry();
+  Object.assign(t, {
+    quranPages: parseInt(document.getElementById('d_quranPages').value) || 0,
+    quranMinutes: parseInt(document.getElementById('d_quranMinutes').value) || 0,
+    zikr: parseInt(document.getElementById('d_zikr').value) || 0,
+    duaRead: document.getElementById('d_duaRead').checked,
     study: parseFloat(document.getElementById('d_study').value) || 0,
-    gov: parseFloat(document.getElementById('d_gov').value) || 0,
     commits: parseInt(document.getElementById('d_commits').value) || 0,
-    emails: parseInt(document.getElementById('d_emails').value) || 0,
     proposals: parseInt(document.getElementById('d_proposals').value) || 0,
+    fiverrTouch: document.getElementById('d_fiverrTouch').checked,
+    marketing: document.getElementById('d_marketing').checked,
+    gov: parseFloat(document.getElementById('d_gov').value) || 0,
     english: parseInt(document.getElementById('d_english').value) || 0,
     exercise: parseInt(document.getElementById('d_exercise').value) || 0,
-    prayers: parseInt(document.getElementById('d_prayers').value) || 0,
     income: parseFloat(document.getElementById('d_income').value) || 0,
     expenses: parseFloat(document.getElementById('d_expenses').value) || 0,
-    fiverr: document.getElementById('d_fiverr').checked,
-    linkedin: document.getElementById('d_linkedin').checked,
-    marketing: document.getElementById('d_marketing').checked
-  };
-  entries[todayStr()] = t;
+    fajr: !!t.fajr, dhuhr: !!t.dhuhr, asr: !!t.asr, maghrib: !!t.maghrib, isha: !!t.isha,
+    social: t.social || {}
+  });
   try {
     await dbSave('entries', entries);
-    const msg = document.getElementById('savedMsg');
-    msg.classList.add('show');
-    setTimeout(()=>msg.classList.remove('show'), 1500);
+    flash('savedMsg');
   } catch(e) { alert('Could not sync — check your internet connection and Supabase setup.'); }
-  renderRecent(); renderWeekly(); renderMonthly(); renderHabits(); renderDashboard();
+  renderEverything();
 }
 
 async function saveConfig() {
@@ -334,11 +640,28 @@ async function saveConfig() {
   };
   try {
     await dbSave('config', config);
-    const msg = document.getElementById('savedMsgCfg');
-    msg.classList.add('show');
-    setTimeout(()=>msg.classList.remove('show'), 1500);
+    flash('savedMsgCfg');
   } catch(e) { alert('Could not sync — check your internet connection and Supabase setup.'); }
   renderDashboard();
+}
+
+async function savePlan() {
+  plan = {
+    title: document.getElementById('plan_title').value,
+    target: document.getElementById('plan_target').value,
+    vision: document.getElementById('plan_vision').value
+  };
+  try {
+    await dbSave('plan', plan);
+    flash('savedMsgPlan');
+  } catch(e) { alert('Could not sync — check your internet connection and Supabase setup.'); }
+  renderPlanProgress();
+}
+
+function flash(id) {
+  const msg = document.getElementById(id);
+  msg.classList.add('show');
+  setTimeout(()=>msg.classList.remove('show'), 1500);
 }
 
 function lastNDays(n) {
@@ -357,30 +680,58 @@ function sumField(days, field) {
   return days.reduce((s,k)=> s + ((entries[k] && entries[k][field]) || 0), 0);
 }
 
+function allPrayers(k) {
+  const t = entries[k];
+  return !!(t && t.fajr && t.dhuhr && t.asr && t.maghrib && t.isha);
+}
+
+function anySocial(k) {
+  const t = entries[k];
+  if (!t || !t.social) return false;
+  return Object.values(t.social).some(v => v > 0);
+}
+
+function prayerStreakDays() {
+  let streak = 0;
+  const d = new Date();
+  for (let i=0;i<365;i++) {
+    const dd = new Date(d);
+    dd.setDate(d.getDate()-i);
+    const key = dd.getFullYear() + '-' + String(dd.getMonth()+1).padStart(2,'0') + '-' + String(dd.getDate()).padStart(2,'0');
+    if (allPrayers(key)) { streak++; } else {
+      if (i === 0) continue;
+      break;
+    }
+  }
+  return streak;
+}
+
+/* ---------- Daily / recent ---------- */
 function renderRecent() {
   const days = lastNDays(7).reverse();
   const withData = days.filter(k => entries[k]);
   const el = document.getElementById('recentLog');
   if (withData.length === 0) { el.innerHTML = '<div class="empty">No entries yet — save your first log above.</div>'; return; }
-  let html = '<table class="log"><tr><th>Date</th><th>Study</th><th>Gov</th><th>Emails</th><th>Proposals</th><th>Income</th></tr>';
+  let html = '<table class="log"><tr><th>Date</th><th>Study</th><th>Gov</th><th>Prayers</th><th>Social</th><th>Income</th></tr>';
   withData.forEach(k => {
     const t = entries[k];
-    html += `<tr><td>${k.slice(5)}</td><td>${t.study||0}h</td><td>${t.gov||0}h</td><td>${t.emails||0}</td><td>${t.proposals||0}</td><td>${t.income||0}</td></tr>`;
+    const p = [t.fajr,t.dhuhr,t.asr,t.maghrib,t.isha].filter(Boolean).length;
+    const socialTotal = t.social ? Object.values(t.social).reduce((a,b)=>a+(b||0),0) : 0;
+    html += `<tr><td>${k.slice(5)}</td><td>${t.study||0}h</td><td>${t.gov||0}h</td><td>${p}/5</td><td>${socialTotal}</td><td>${t.income||0}</td></tr>`;
   });
   html += '</table>';
   el.innerHTML = html;
 }
 
+/* ---------- Weekly / Monthly ---------- */
 function renderWeekly() {
   const days = lastNDays(7);
-  const study = sumField(days,'study'), target_study = 28;
-  const emails = sumField(days,'emails'), target_emails = 25;
-  const proposals = sumField(days,'proposals'), target_proposals = 15;
-  const commits = sumField(days,'commits');
+  const socialTotal7 = SOCIAL_PLATFORMS.reduce((s,p)=>s+socialSum(days,p.key),0);
   const bars = [
-    ['Coading Study hours', study, target_study, 'h'],
-    ['Cold emails', emails, target_emails, ''],
-    ['Fiverr/Upwork proposals', proposals, target_proposals, '']
+    ['Coding study hours', sumField(days,'study'), 28, 'h'],
+    ['Fiverr/Upwork proposals', sumField(days,'proposals'), 15, ''],
+    ["Qur'an minutes", sumField(days,'quranMinutes'), 210, 'm'],
+    ['Social posts (all platforms)', socialTotal7, 35, '']
   ];
   let html = '';
   bars.forEach(([label,val,target,unit]) => {
@@ -388,26 +739,34 @@ function renderWeekly() {
     html += `<div class="progress-row"><div class="progress-label">${label}</div><div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div><div class="progress-pct">${val}${unit}/${target}${unit}</div></div>`;
   });
   document.getElementById('weeklyBars').innerHTML = html;
+  const fullPrayerDays = days.filter(allPrayers).length;
   document.getElementById('weeklyTotals').innerHTML = `
-    GitHub commits: <b>${commits}</b> &middot;
-    Gov-job study: <b>${sumField(days,'gov')}h</b> &middot;
+    GitHub commits: <b>${sumField(days,'commits')}</b> &middot;
+    Gov-exam study: <b>${sumField(days,'gov')}h</b> &middot;
     Exercise: <b>${sumField(days,'exercise')} min</b> &middot;
-    Marketing blocks done: <b>${days.filter(k=>entries[k]&&entries[k].marketing).length}/7</b>
+    Marketing blocks done: <b>${days.filter(k=>entries[k]&&entries[k].marketing).length}/7</b><br>
+    5/5 prayer days: <b>${fullPrayerDays}/7</b> &middot;
+    Zikr total: <b>${sumField(days,'zikr')}</b>
   `;
 }
 
 function renderMonthly() {
   const days = lastNDays(30);
-  const study = sumField(days,'study');
-  const commits = sumField(days,'commits');
   const income = sumField(days,'income');
   const expenses = sumField(days,'expenses');
+  const socialTotal30 = SOCIAL_PLATFORMS.reduce((s,p)=>s+socialSum(days,p.key),0);
   document.getElementById('monthlyStats').innerHTML = `
     <div class="kpi-grid">
-      <div class="kpi"><div class="num">${study}h</div><div class="lab">Study hours</div></div>
-      <div class="kpi"><div class="num">${commits}</div><div class="lab">GitHub commits</div></div>
-      <div class="kpi"><div class="num">${sumField(days,'emails')}</div><div class="lab">Cold emails</div></div>
+      <div class="kpi"><div class="num">${sumField(days,'study')}h</div><div class="lab">Study hours</div></div>
+      <div class="kpi"><div class="num">${sumField(days,'commits')}</div><div class="lab">GitHub commits</div></div>
       <div class="kpi"><div class="num">${sumField(days,'proposals')}</div><div class="lab">Proposals</div></div>
+      <div class="kpi"><div class="num">${socialTotal30}</div><div class="lab">Social posts</div></div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="num">${days.filter(allPrayers).length}/30</div><div class="lab">Full prayer days</div></div>
+      <div class="kpi"><div class="num">${sumField(days,'quranMinutes')}m</div><div class="lab">Qur'an time</div></div>
+      <div class="kpi"><div class="num">${sumField(days,'zikr')}</div><div class="lab">Zikr count</div></div>
+      <div class="kpi"><div class="num">${sumField(days,'gov')}h</div><div class="lab">Job-exam study</div></div>
     </div>`;
   document.getElementById('moneyStats').innerHTML = `
     Income (30d): <b>${income.toLocaleString()} BDT</b> &middot;
@@ -416,35 +775,55 @@ function renderMonthly() {
   `;
 }
 
+/* ---------- Habits ---------- */
 function renderHabits() {
   const days = lastNDays(30);
   const cols = [
-    ['Study block', k => entries[k] && entries[k].study > 0],
-    ['Marketing block', k => entries[k] && entries[k].marketing],
-    ['Exercise', k => entries[k] && entries[k].exercise > 0],
-    ['5 prayers', k => entries[k] && entries[k].prayers >= 5]
+    ['Study block', k => entries[k] && entries[k].study > 0, ''],
+    ['Marketing block', k => entries[k] && entries[k].marketing, ''],
+    ['Social posted', k => anySocial(k), ''],
+    ['Exercise', k => entries[k] && entries[k].exercise > 0, ''],
+    ['5 prayers', k => allPrayers(k), 'islamic-on'],
+    ["Qur'an", k => entries[k] && (entries[k].quranMinutes>0 || entries[k].quranPages>0), 'islamic-on']
   ];
   let html = '';
-  cols.forEach(([label, test]) => {
+  cols.forEach(([label, test, extraClass]) => {
     html += `<div class="habit-col"><h4>${label}</h4><div class="habit-boxes">`;
     days.forEach(k => {
-      html += `<div class="hb ${test(k) ? 'on' : ''}"></div>`;
+      html += `<div class="hb ${test(k) ? 'on '+extraClass : ''}"></div>`;
     });
     html += '</div></div>';
   });
   document.getElementById('habitGrid').innerHTML = html;
 }
 
+/* ---------- Dashboard ---------- */
 function renderDashboard() {
   const days30 = lastNDays(30);
   const days7 = lastNDays(7);
-  const studyMonth = sumField(days30,'study');
-  const incomeMonth = sumField(days30,'income');
   document.getElementById('kpiGrid').innerHTML = `
     <div class="kpi"><div class="num">${config.level||'&ndash;'}</div><div class="lab">Current level</div></div>
     <div class="kpi"><div class="num">${config.quarter||'&ndash;'}</div><div class="lab">Current quarter</div></div>
     <div class="kpi"><div class="num" style="font-size:13px;">${config.skill||'&ndash;'}</div><div class="lab">Focus skill</div></div>
     <div class="kpi"><div class="num" style="font-size:13px;">${config.project||'&ndash;'}</div><div class="lab">Current project</div></div>
+  `;
+  const openTasks = tasks.filter(x=>!x.done).length;
+  const openStudy = study.filter(x=>!x.done).length;
+  const memorized = quran.filter(x=>x.done).length;
+  document.getElementById('kpiGrid2').innerHTML = `
+    <div class="kpi"><div class="num">${prayerStreakDays()}</div><div class="lab">Prayer streak (days)</div></div>
+    <div class="kpi"><div class="num">${openTasks}</div><div class="lab">Open work tasks</div></div>
+    <div class="kpi"><div class="num">${openStudy}</div><div class="lab">Study topics left</div></div>
+    <div class="kpi"><div class="num">${memorized}</div><div class="lab">Surahs memorized</div></div>
+  `;
+  const openIdeas = ideas.filter(x=>!x.done).length;
+  const milestonesDone = milestones.filter(x=>x.done).length;
+  const milestonePct = milestones.length ? Math.round((milestonesDone/milestones.length)*100) : 0;
+  document.getElementById('kpiGrid3').innerHTML = `
+    <div class="kpi"><div class="num">${openIdeas}</div><div class="lab">Ideas waiting</div></div>
+    <div class="kpi"><div class="num">${milestonePct}%</div><div class="lab">4-month plan progress</div></div>
+    <div class="kpi"><div class="num">${planDaysLeft() ?? '&ndash;'}</div><div class="lab">Days left on plan</div></div>
+    <div class="kpi"><div class="num">${SOCIAL_PLATFORMS.reduce((s,p)=>s+socialSum(days7,p.key),0)}</div><div class="lab">Social posts (7d)</div></div>
   `;
   const weeklyPct = Math.min(100, Math.round((sumField(days7,'study')/28)*100));
   document.getElementById('dashProgress').innerHTML = `
@@ -452,11 +831,314 @@ function renderDashboard() {
     <div class="small" style="margin-top:10px;">
       Weekly goal: <b>${config.weekly || 'not set'}</b><br>
       Monthly goal: <b>${config.monthly || 'not set'}</b><br>
-      Study hours this month: <b>${studyMonth}h</b> &middot; Income this month: <b>${incomeMonth.toLocaleString()} BDT</b>
+      Study hours this month: <b>${sumField(days30,'study')}h</b> &middot; Income this month: <b>${sumField(days30,'income').toLocaleString()} BDT</b>
     </div>
   `;
 }
 
+function planDaysLeft() {
+  if (!plan.target) return null;
+  const target = new Date(plan.target + 'T00:00:00');
+  const now = new Date();
+  now.setHours(0,0,0,0);
+  const diff = Math.ceil((target - now) / (1000*60*60*24));
+  return diff;
+}
+
+/* ---------- Islamic: prayers ---------- */
+function renderPrayerGrid() {
+  const t = entries[todayStr()] || {};
+  document.getElementById('prayerGrid').innerHTML = PRAYERS.map(p => `
+    <div class="prayer-btn ${t[p.key] ? 'on' : ''}" onclick="togglePrayer('${p.key}')">
+      <span class="mark">${p.mark}</span>${p.label}
+    </div>
+  `).join('');
+  const streak = prayerStreakDays();
+  const doneToday = [t.fajr,t.dhuhr,t.asr,t.maghrib,t.isha].filter(Boolean).length;
+  document.getElementById('prayerStreak').textContent = `${streak} day streak · ${doneToday}/5 today`;
+}
+
+async function togglePrayer(key) {
+  const t = todayEntry();
+  t[key] = !t[key];
+  try { await dbSave('entries', entries); } catch(e) { console.error(e); }
+  renderPrayerGrid();
+  populateTodayForm();
+  renderHabits();
+  renderDashboard();
+  renderWeekly();
+}
+
+/* ---------- Islamic: tasbih ---------- */
+function renderTasbih() {
+  const t = entries[todayStr()] || {};
+  document.getElementById('tasbihBtn').textContent = t.zikr || 0;
+}
+
+function tapTasbih(n) {
+  const t = todayEntry();
+  t.zikr = (t.zikr || 0) + n;
+  document.getElementById('tasbihBtn').textContent = t.zikr;
+  document.getElementById('d_zikr').value = t.zikr;
+  clearTimeout(tasbihSaveTimer);
+  tasbihSaveTimer = setTimeout(async () => {
+    try { await dbSave('entries', entries); } catch(e) { console.error(e); }
+    renderHabits(); renderWeekly();
+  }, 700);
+}
+
+async function resetTasbih() {
+  const t = todayEntry();
+  t.zikr = 0;
+  renderTasbih();
+  document.getElementById('d_zikr').value = 0;
+  try { await dbSave('entries', entries); } catch(e) { console.error(e); }
+}
+
+/* ---------- Islamic: Quran quick fields ---------- */
+function renderQuranQuickFields() {
+  const t = entries[todayStr()] || {};
+  document.getElementById('q_pages').value = t.quranPages || '';
+  document.getElementById('q_minutes').value = t.quranMinutes || '';
+  document.getElementById('q_dua').checked = !!t.duaRead;
+}
+
+async function updateQuranQuick() {
+  const t = todayEntry();
+  t.quranPages = parseInt(document.getElementById('q_pages').value) || 0;
+  t.quranMinutes = parseInt(document.getElementById('q_minutes').value) || 0;
+  try { await dbSave('entries', entries); } catch(e) { console.error(e); }
+  populateTodayForm(); renderHabits(); renderWeekly(); renderMonthly();
+}
+
+async function updateDuaQuick() {
+  const t = todayEntry();
+  t.duaRead = document.getElementById('q_dua').checked;
+  try { await dbSave('entries', entries); } catch(e) { console.error(e); }
+  populateTodayForm();
+}
+
+/* ---------- Work: social grid ---------- */
+function renderSocialGrid() {
+  const t = entries[todayStr()] || {};
+  const s = t.social || {};
+  document.getElementById('socialGrid').innerHTML = SOCIAL_PLATFORMS.map(p => `
+    <div class="social-field">
+      <label>${p.label}</label>
+      <input type="number" min="0" id="soc_${p.key}" value="${s[p.key] || ''}" onchange="updateSocialQuick('${p.key}')">
+    </div>
+  `).join('');
+}
+
+function updateSocialQuick(key) {
+  const t = todayEntry();
+  if (!t.social) t.social = {};
+  t.social[key] = parseInt(document.getElementById('soc_'+key).value) || 0;
+  clearTimeout(socialSaveTimer);
+  socialSaveTimer = setTimeout(async () => {
+    try { await dbSave('entries', entries); } catch(e) { console.error(e); }
+    renderHabits(); renderWeekly(); renderMonthly(); renderSocialStats(); renderDashboard();
+  }, 500);
+}
+
+function renderSocialStats() {
+  const days7 = lastNDays(7), days30 = lastNDays(30);
+  let html = '<table class="social-table"><tr><th>Platform</th><th>7 days</th><th>30 days</th></tr>';
+  SOCIAL_PLATFORMS.forEach(p => {
+    html += `<tr><td>${p.label}</td><td>${socialSum(days7,p.key)}</td><td>${socialSum(days30,p.key)}</td></tr>`;
+  });
+  const total7 = SOCIAL_PLATFORMS.reduce((s,p)=>s+socialSum(days7,p.key),0);
+  const total30 = SOCIAL_PLATFORMS.reduce((s,p)=>s+socialSum(days30,p.key),0);
+  html += `<tr><td><b>Total</b></td><td><b>${total7}</b></td><td><b>${total30}</b></td></tr></table>`;
+  document.getElementById('socialStatsTable').innerHTML = html;
+}
+
+/* ---------- Generic list rendering ---------- */
+function renderList(containerId, items, opts) {
+  const el = document.getElementById(containerId);
+  if (!items.length) { el.innerHTML = '<div class="empty">Nothing here yet — add your first item above.</div>'; return; }
+  el.innerHTML = items.map(item => `
+    <li class="list-item">
+      <input type="checkbox" ${item.done ? 'checked' : ''} onchange="${opts.toggleFn}('${item.id}')">
+      <span class="txt ${item.done ? 'done' : ''}">${escapeHtml(item.text)}</span>
+      ${item.tag ? `<span class="tag">${escapeHtml(item.tag)}</span>` : ''}
+      <button class="del" onclick="${opts.deleteFn}('${item.id}')">&times;</button>
+    </li>
+  `).join('');
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ---------- Work tasks ---------- */
+function renderTaskList() { renderList('taskList', tasks, { toggleFn:'toggleTask', deleteFn:'deleteTask' }); }
+
+async function addTask() {
+  const input = document.getElementById('taskNew');
+  const text = input.value.trim();
+  if (!text) return;
+  const platform = document.getElementById('taskPlatform').value;
+  tasks.unshift({ id:newId(), text, tag:platform, done:false });
+  input.value = '';
+  try { await dbSave('tasks', tasks); } catch(e) { console.error(e); }
+  renderTaskList(); renderDashboard();
+}
+async function toggleTask(id) {
+  const item = tasks.find(x=>x.id===id); if (!item) return;
+  item.done = !item.done;
+  try { await dbSave('tasks', tasks); } catch(e) { console.error(e); }
+  renderTaskList(); renderDashboard();
+}
+async function deleteTask(id) {
+  tasks = tasks.filter(x=>x.id!==id);
+  try { await dbSave('tasks', tasks); } catch(e) { console.error(e); }
+  renderTaskList(); renderDashboard();
+}
+
+/* ---------- Ideas ---------- */
+function renderIdeaList() { renderList('ideaList', ideas, { toggleFn:'toggleIdea', deleteFn:'deleteIdea' }); }
+
+async function addIdea() {
+  const input = document.getElementById('ideaNew');
+  const text = input.value.trim();
+  if (!text) return;
+  const tag = document.getElementById('ideaTag').value;
+  ideas.unshift({ id:newId(), text, tag, done:false });
+  input.value = '';
+  try { await dbSave('ideas', ideas); } catch(e) { console.error(e); }
+  renderIdeaList(); renderDashboard();
+}
+async function toggleIdea(id) {
+  const item = ideas.find(x=>x.id===id); if (!item) return;
+  item.done = !item.done;
+  try { await dbSave('ideas', ideas); } catch(e) { console.error(e); }
+  renderIdeaList(); renderDashboard();
+}
+async function deleteIdea(id) {
+  ideas = ideas.filter(x=>x.id!==id);
+  try { await dbSave('ideas', ideas); } catch(e) { console.error(e); }
+  renderIdeaList(); renderDashboard();
+}
+
+/* ---------- Study topics ---------- */
+function renderStudyList() { renderList('studyList', study, { toggleFn:'toggleStudy', deleteFn:'deleteStudy' }); }
+
+async function addStudyItem() {
+  const input = document.getElementById('studyNew');
+  const text = input.value.trim();
+  if (!text) return;
+  study.unshift({ id:newId(), text, done:false });
+  input.value = '';
+  try { await dbSave('study', study); } catch(e) { console.error(e); }
+  renderStudyList(); renderDashboard();
+}
+async function toggleStudy(id) {
+  const item = study.find(x=>x.id===id); if (!item) return;
+  item.done = !item.done;
+  try { await dbSave('study', study); } catch(e) { console.error(e); }
+  renderStudyList(); renderDashboard();
+}
+async function deleteStudy(id) {
+  study = study.filter(x=>x.id!==id);
+  try { await dbSave('study', study); } catch(e) { console.error(e); }
+  renderStudyList(); renderDashboard();
+}
+
+function renderSkillList() { renderList('skillList', skills || [], { toggleFn:'toggleSkill', deleteFn:'deleteSkill' }); }
+async function toggleSkill(id) {
+  const item = skills.find(x=>x.id===id); if (!item) return;
+  item.done = !item.done;
+  try { await dbSave('skills', skills); } catch(e) { console.error(e); }
+  renderSkillList();
+}
+async function deleteSkill(id) {
+  skills = skills.filter(x=>x.id!==id);
+  try { await dbSave('skills', skills); } catch(e) { console.error(e); }
+  renderSkillList();
+}
+
+function renderStudyStats() {
+  const days7 = lastNDays(7), days30 = lastNDays(30);
+  document.getElementById('studyStats').innerHTML = `
+    This week — Coding: <b>${sumField(days7,'study')}h</b>, Job-exam: <b>${sumField(days7,'gov')}h</b>, English: <b>${sumField(days7,'english')} min</b><br>
+    This month — Coding: <b>${sumField(days30,'study')}h</b>, Job-exam: <b>${sumField(days30,'gov')}h</b>, English: <b>${sumField(days30,'english')} min</b>
+  `;
+}
+
+/* ---------- Quran surah list ---------- */
+function renderQuranList() { renderList('quranList', quran, { toggleFn:'toggleQuran', deleteFn:'deleteQuran' }); }
+
+async function addQuranItem() {
+  const input = document.getElementById('quranNew');
+  const text = input.value.trim();
+  if (!text) return;
+  quran.unshift({ id:newId(), text, tag:'learning', done:false });
+  input.value = '';
+  try { await dbSave('quran', quran); } catch(e) { console.error(e); }
+  renderQuranList(); renderDashboard();
+}
+async function toggleQuran(id) {
+  const item = quran.find(x=>x.id===id); if (!item) return;
+  item.done = !item.done;
+  item.tag = item.done ? 'memorized' : 'learning';
+  try { await dbSave('quran', quran); } catch(e) { console.error(e); }
+  renderQuranList(); renderDashboard();
+}
+async function deleteQuran(id) {
+  quran = quran.filter(x=>x.id!==id);
+  try { await dbSave('quran', quran); } catch(e) { console.error(e); }
+  renderQuranList(); renderDashboard();
+}
+
+/* ---------- 4-Month plan: milestones ---------- */
+function renderMilestoneList() {
+  const el = document.getElementById('milestoneList');
+  if (!milestones.length) { el.innerHTML = '<div class="empty">No milestones yet — break your 4-month goal into steps above.</div>'; return; }
+  el.innerHTML = milestones.map(item => `
+    <li class="list-item">
+      <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleMilestone('${item.id}')">
+      <span class="txt ${item.done ? 'done' : ''}">${escapeHtml(item.text)}</span>
+      <span class="tag">Month ${item.month}</span>
+      <button class="del" onclick="deleteMilestone('${item.id}')">&times;</button>
+    </li>
+  `).join('');
+}
+
+async function addMilestone() {
+  const input = document.getElementById('milestoneNew');
+  const text = input.value.trim();
+  if (!text) return;
+  const month = document.getElementById('milestoneMonth').value;
+  milestones.push({ id:newId(), text, month, done:false });
+  input.value = '';
+  try { await dbSave('milestones', milestones); } catch(e) { console.error(e); }
+  renderMilestoneList(); renderPlanProgress(); renderDashboard();
+}
+async function toggleMilestone(id) {
+  const item = milestones.find(x=>x.id===id); if (!item) return;
+  item.done = !item.done;
+  try { await dbSave('milestones', milestones); } catch(e) { console.error(e); }
+  renderMilestoneList(); renderPlanProgress(); renderDashboard();
+}
+async function deleteMilestone(id) {
+  milestones = milestones.filter(x=>x.id!==id);
+  try { await dbSave('milestones', milestones); } catch(e) { console.error(e); }
+  renderMilestoneList(); renderPlanProgress(); renderDashboard();
+}
+
+function renderPlanProgress() {
+  const done = milestones.filter(x=>x.done).length;
+  const pct = milestones.length ? Math.round((done/milestones.length)*100) : 0;
+  document.getElementById('planProgressFill').style.width = pct + '%';
+  document.getElementById('planProgressPct').textContent = pct + '%';
+  const daysLeft = planDaysLeft();
+  document.getElementById('planCountdown').textContent = daysLeft === null
+    ? 'Set a target date above to see your countdown.'
+    : (daysLeft >= 0 ? `${daysLeft} days left on this plan.` : `Target date passed ${Math.abs(daysLeft)} days ago — time to set a new one.`);
+}
+
+/* ---------- Tabs ---------- */
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
